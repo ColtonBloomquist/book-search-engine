@@ -1,4 +1,4 @@
-const { User, Book } = require("../models");
+const User = require("../models/User");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
 
@@ -38,11 +38,11 @@ const resolvers = {
       return { token, user };
     },
 
-    saveBook: async (parent, { book }, context) => {
+    saveBook: async (parent, args, context) => {
       if (context.user) {
         const updatedUserBookList = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: book } },
+          { $addToSet: { savedBook: args } },
           { new: true }
         );
         return updatedUserBookList;
